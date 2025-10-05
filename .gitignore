@@ -1,5 +1,23 @@
-node_modules
-# Keep environment variables out of version control
+node_modules/
 .env
+# Diretórios de build e logs
+dist/
+build/
+logs/
+*.log
 
-/generated/prisma
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Pasta do Prisma gerada automaticamente
+prisma/generated/
+prisma/migrations/
+
+# Cache do editor
+.vscode/
+.idea/
+
+# Outros arquivos comuns
+*.sqlite
+*.db
