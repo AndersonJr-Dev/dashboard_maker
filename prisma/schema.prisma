@@ -1,0 +1,54 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// 1. MODELO DE USUÁRIOS
+
+// Enum para definir os níveis de acesso (funções)
+enum Role {
+    ADMIN   // Acesso total
+    STAFF   // Acesso Limitado
+}
+
+// Tabela de usuários para o sistema de login (Dashboard)
+model User {
+    id          String  @id @default(uuid())
+    email       String  @unique
+    password    String  // Hash da senha
+    name        String
+    role        Role    @default(STAFF) // Padrão é STAFF, mas o primeiro deve ser ADMIN
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    @@map("users") // Nome real da tabela no PostgreSQL
+}
+
+// 2. MODELO DE PRODUTOS
+
+// Tabela principal para catálogo de produtos da gráfica
+model Product {
+    id              String      @id @default(uuid())
+    name            String
+    description     String
+    sku             String?     @unique // Código do produto
+    category        String      // Ex: Cartões de Visita, Flyers, Banners
+
+    // Preços e Estoque
+    costPrice       Float       // Preço de custo
+    salePrice       Float       // Prelo de venda final
+    stockQuantity   Int         @default(0) // Quantidade em estoque (se aplicável)
+
+    // Imagens e Status
+    imageUrl        String?     // Url da imagem principal do produto
+    isActive        Boolean     @default(true) // Se o produto está visível no sistema
+
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
+
+    @@map("products") // Nome real da tabela no PostgreSQL
+}
